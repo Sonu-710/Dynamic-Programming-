@@ -1,0 +1,68 @@
+//Memoization
+//Time Complexity : O (n)
+//Space Complexity : O(n) + O(n)
+
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        int[] dp=new int[cost.length];
+        Arrays.fill(dp,-1);
+
+        //We take the min, when we start from 0 or 1.
+        return Math.min(minCost(0,cost,dp),minCost(1,cost,dp));
+    }
+    static int minCost(int index,int[] cost,int[] dp)
+    {
+        if(index==cost.length)
+        return 0;
+        if(dp[index]==-1)
+        {
+            int oneStep=minCost(index+1,cost,dp);
+            int twoSteps=0;
+            if(index+2<cost.length)
+            twoSteps=minCost(index+2,cost,dp);
+            dp[index]=cost[index]+Math.min(oneStep,twoSteps);
+        }
+        return dp[index];
+    }
+}
+
+//Tabulation
+//Time Complexity : O (n)
+//Space Complexity : O(n)
+
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        int[] dp=new int[cost.length+1];
+        for(int i=cost.length-1;i>=0;i--)
+        {
+            int oneStep=dp[i+1];
+            int twoSteps=0;
+            if(i+2<=cost.length)
+            twoSteps=dp[i+2];
+            dp[i]=Math.min(oneStep,twoSteps)+cost[i];
+        }
+        return Math.min(dp[0],dp[1]);
+    }
+}
+
+//Space Optimization
+//Time Complexity : O (n)
+//Space Complexity : O(1)
+
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        int oneStepBack=0;
+        int twoStepBack=0;
+        for(int i=cost.length-1;i>=0;i--)
+        {
+            int oneStep=oneStepBack;
+            int twoSteps=0;
+            if(i+2<=cost.length)
+            twoSteps=twoStepBack;
+            int curr=Math.min(oneStep,twoSteps)+cost[i];
+            twoStepBack=oneStepBack;
+            oneStepBack=curr;
+        }
+        return Math.min(oneStepBack,twoStepBack);
+    }
+}

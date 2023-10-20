@@ -1,0 +1,69 @@
+//Memoization
+//Time Complexity : O(n)
+//Space Complexity : O(n) + O(n)
+
+class Solution {
+    public int climbStairs(int n) {
+        int[] dp=new int[n+1];
+        Arrays.fill(dp,-1);
+        return steps(n,dp);
+    }
+    static int steps(int n,int[] dp)
+    {
+        if(n==0)
+        return 1;
+        if(dp[n]==-1)
+        {
+            int oneStep=steps(n-1,dp);
+            int twoStep=0;
+            if(n-2>=0)
+            twoStep=steps(n-2,dp);
+            dp[n]=oneStep+twoStep;
+        }
+        return dp[n];
+    }
+}
+
+
+//Tabulation
+//Time Complexity : O(n)
+//Space Complexity : O(n)
+
+class Solution {
+    public int climbStairs(int n) {
+        int[] dp=new int[n+1];
+        dp[0]=1;   //Base Condition
+        for(int i=1;i<=n;i++)
+        {
+            int oneStep=dp[i-1];
+            int twoStep=0;
+            if(i-2>=0)
+            twoStep=dp[i-2];
+            dp[i]=oneStep+twoStep;
+        }
+        return dp[n];
+    }
+}
+
+//Space Optimization
+//Time Complexity : O(n)
+//Space Complexity : O(1)
+
+class Solution {
+    public int climbStairs(int n) {
+        int one=1;  //one step back
+        int two=0;  //two steps back
+        for(int i=1;i<=n;i++)
+        {
+            int oneStep=one;
+            int twoStep=0;
+            if(i-2>=0)
+            twoStep=two;
+            int curr=oneStep+twoStep;   //No of ways for the current step
+            two=one;    
+            one=curr;
+        }
+        return one;
+    }
+}
+

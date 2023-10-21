@@ -1,0 +1,67 @@
+//Memoization
+//Time Complexity : O(n)
+//Space Complexity : O(n) + O(n)
+
+class Solution {
+    public int rob(int[] nums) {
+        int[] dp=new int[nums.length];
+        Arrays.fill(dp,-1);
+        return max(nums.length-1,nums,dp);
+    }
+    static int max(int index,int[] nums,int[] dp)
+    {
+        if(index<0)
+        return 0;
+        if(index==0)
+        return nums[0];
+        if(dp[index]==-1)
+        {
+            int skip=max(index-1,nums,dp);
+            int pick=nums[index]+max(index-2,nums,dp);  //If this house is robbed then skip the next House
+            dp[index]=Math.max(pick,skip);
+        }
+        return dp[index];
+    }
+}
+
+//Tabulation
+//Time Complexity : O(n)
+//Space Complexity : O(n) 
+
+class Solution {
+    public int rob(int[] nums) {
+        int[] dp=new int[nums.length];
+        dp[0]=nums[0];
+        for(int i=1;i<nums.length;i++)
+        {
+            int skip=dp[i-1];
+            int pick=nums[i];
+            if(i-2>=0)
+            pick+=dp[i-2];
+            dp[i]=Math.max(pick,skip);
+        }
+        return dp[nums.length-1];
+    }
+}
+
+//Space Optimization
+//Time Complexity : O(n)
+//Space Complexity : O(1)
+
+class Solution {
+    public int rob(int[] nums) {
+        int prev=nums[0];
+        int prePrev=0;
+        for(int i=1;i<nums.length;i++)
+        {
+            int skip=prev;
+            int pick=nums[i];
+            if(i-2>=0)
+            pick+=prePrev;
+            int curr=Math.max(pick,skip);
+            prePrev=prev;
+            prev=curr;
+        }
+        return prev;
+    }
+}

@@ -1,0 +1,44 @@
+//Recursive Approch
+//Time Complexity : O(2^N * N/2)
+//Space Complexity : O(N*N) + O(N)
+
+class Solution {
+    public List<List<String>> partition(String s) {
+        List<List<String>> list=new ArrayList<>();
+        List<String> arr=new ArrayList<>();
+        generate(0,s,list,arr);
+        return list;
+    }
+    static void generate(int index,String s,List<List<String>> list,List<String> arr)
+    {
+        if(index==s.length())
+        {
+            list.add(new ArrayList<>(arr));
+            return;
+        }
+        for(int i=index;i<s.length();i++)
+        {
+            if(isPalindrome(index,i,s))
+            {
+                arr.add(s.substring(index,i+1));    //We insert the Substring in the List
+                generate(i+1,s,list,arr);   //We recursively Partiiton the String
+                arr.remove(arr.size()-1);   //We remove the Substring when we backtrack
+            }
+        }
+    }
+
+    //To see if the Substring is Palindrome
+    static boolean isPalindrome(int start,int end,String s)
+    {  
+        while(start<=end)
+        {
+            if(s.charAt(start)!=s.charAt(end))
+            return false;
+            start++;
+            end--;
+        }
+        return true;
+    }
+}
+
+//

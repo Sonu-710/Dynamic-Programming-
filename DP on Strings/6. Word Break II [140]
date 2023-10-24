@@ -1,0 +1,34 @@
+//Recursion
+//Time Complexity : O(2^N)+ O(N)
+//Space Complexity : O(N) + O(N)
+
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        List<String> list=new ArrayList<>();
+        HashSet<String> set=new HashSet<String>();
+        for(int i=0;i<wordDict.size();i++)
+        set.add(wordDict.get(i));
+        generate(s,"",0,list,set);
+        return list;
+
+    }
+    static void generate(String s,String str,int index,List<String> list,HashSet<String> set)
+    {
+        if(index==s.length())
+        {
+            list.add(str);
+            return;
+        }
+        for(int i=index;i<s.length();i++)
+        {
+            String sub=s.substring(index,i+1);
+            if(set.contains(sub))
+            {
+                if(str.equals(""))
+                generate(s,sub,i+1,list,set);
+                else
+                generate(s,str+" "+sub,i+1,list,set);
+            }
+        }
+    }
+}

@@ -7,7 +7,7 @@ class Solution {
         int j=0;
         while(i<s.length() && j<t.length())
         {
-            if(s.charAt(i)==t.charAt(j))
+            if(s.charAt(i)==t.charAt(j))    //if they match we slide the pointers
             i++;
             j++;
         }   

@@ -1,0 +1,58 @@
+//Memoization
+//Time Complexity : O(N)
+//Space Complexity : O(N) + O(N) + O(Dictionary)
+
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        HashSet<String> set=new HashSet<>();
+        for(int i=0;i<wordDict.size();i++)
+        set.add(wordDict.get(i));           //We put the Dictionary words in the HashSet for easy access.
+        int[] dp=new int[s.length()];
+        Arrays.fill(dp,-1);
+        return split(0,s,set,dp);
+    }
+    static boolean split(int index,String s,HashSet<String> set,int[] dp)
+    {
+        if(index==s.length())
+        return true;
+        if(dp[index]==-1)
+        {
+            boolean split=false;
+            for(int i=index;i<s.length();i++)
+            {
+                if(set.contains(s.substring(index,i+1)))        //We see is possible to split the String at index i
+                split=(split||split(i+1,s,set,dp));             //If any of the Splits gives us a true value we mark it as true.
+            }
+            if(split)
+            dp[index]=1;
+            else
+            dp[index]=0;
+        }
+        return (dp[index]==1);
+    }
+}
+
+//Tabulationn
+//Time Compleixty : O(N)
+//Space Complexity : O(N) + O(Dictionary)
+
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        HashSet<String> set=new HashSet<>();
+        for(int i=0;i<wordDict.size();i++)
+        set.add(wordDict.get(i)); 
+        boolean[] dp=new boolean[s.length()+1];
+        dp[s.length()]=true;
+        for(int i=s.length()-1;i>=0;i--)
+        {
+            boolean split=false;
+            for(int j=i;j<s.length();j++)
+            {
+                if(set.contains(s.substring(i,j+1)))
+                split=(split||dp[j+1]);
+            }
+            dp[i]=split;
+        }
+        return dp[0];
+    }
+}

@@ -1,0 +1,120 @@
+//Memoization
+//Time Complexity : O(N*N*|Words|) + O(NlogN)
+//Space Compexity : O(N*N) + O(N)
+
+class Solution {
+    public int longestStrChain(String[] words) {
+        Arrays.sort(words,new java.util.Comparator<String>()
+        {
+            public int compare(String a,String b)   //We Compare the Strings based on their Lengths, if they are equal in length we sort in lexicographic Order
+            {
+                int s=a.length()-b.length();
+                if(s==0)
+                s=a.compareTo(b);
+                return s;
+            }
+        });
+        int[][] dp=new int[words.length][words.length+1];
+        for(int[] row:dp)
+        Arrays.fill(row,-1);
+        return max(0,-1,words,dp);
+    }
+    static int max(int index,int prev,String[] nums,int[][] dp)
+    {
+        if(index==nums.length)
+        return 0;
+        if(dp[index][prev+1]==-1)
+        {
+            int skip=max(index+1,prev,nums,dp);
+            int pick=0;
+            if(prev==-1 || valid(nums[prev],nums[index]))
+            pick=1+max(index+1,index,nums,dp);
+            dp[index][prev+1]=Math.max(pick,skip);
+        }
+        return dp[index][prev+1];
+    }
+    static boolean valid(String a,String b)
+    {
+        if(a.length()+1!=b.length())
+        return false;
+        boolean flag=true;
+        int i=0;
+        int j=0;
+        while(i<a.length() && j<b.length())
+        {
+            if(a.charAt(i)!=b.charAt(j))
+            {
+                if(flag)
+                {
+                    flag=false;
+                    j++;
+                    continue;
+                }
+                else
+                return false;
+
+            }
+            i++;
+            j++;
+        }
+        return true;
+    }
+}
+
+//Tabulation 
+//Time Complexity : O(N*N*|Words|) + O(NlogN)
+//Space Compexity : O(N)
+
+class Solution {
+    public int longestStrChain(String[] words) {
+        Arrays.sort(words,new java.util.Comparator<String>()
+        {
+            public int compare(String a,String b)   //We Compare the Strings based on their Lengths, if they are equal in length we sort in lexicographical Order
+            {
+                int s=a.length()-b.length();
+                if(s==0)
+                s=a.compareTo(b);
+                return s;
+            }
+        });
+        int[] dp=new int[words.length+1];
+        int max=1;
+        for(int i=0;i<words.length;i++)
+        {
+            dp[i]=1;
+            for(int j=0;j<i;j++)
+            {
+                if(valid(words[j],words[i]) && dp[i]<dp[j]+1)
+                dp[i]=1+dp[j];
+            }
+            max=Math.max(max,dp[i]);
+        }
+        return max;
+    }
+    static boolean valid(String a,String b)
+    {
+        if(a.length()+1!=b.length())
+        return false;
+        boolean flag=true;
+        int i=0;
+        int j=0;
+        while(i<a.length() && j<b.length())
+        {
+            if(a.charAt(i)!=b.charAt(j))
+            {
+                if(flag)
+                {
+                    flag=false;
+                    j++;
+                    continue;
+                }
+                else
+                return false;
+
+            }
+            i++;
+            j++;
+        }
+        return true;
+    }
+}

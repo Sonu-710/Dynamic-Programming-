@@ -1,0 +1,54 @@
+//Greedy Approch
+//Time Compexity : O(NLogN)
+//Space Complexity : O(N)
+
+class Solution {
+    public String longestDiverseString(int a, int b, int c) {
+        PriorityQueue<pair> pq=new PriorityQueue<pair>(Collections.reverseOrder());
+        if(a>0)     pq.add(new pair('a',a));
+        if(b>0)     pq.add(new pair('b',b));
+        if(c>0)     pq.add(new pair('c',c));
+        char[] arr=new char[a+b+c];
+        int i=0;
+        while(pq.isEmpty()==false)
+        {
+            pair p=pq.remove();
+            if(i>1 && arr[i-1]==arr[i-2] && arr[i-1]==p.x)
+            {
+                if(pq.isEmpty())
+                return new String(arr).substring(0,i);
+                pair temp=pq.remove();
+                arr[i]=temp.x;
+                temp.y=temp.y-1;
+                if(temp.y!=0)
+                pq.add(temp);
+                pq.add(p);
+            }
+            else
+            {
+                arr[i]=p.x;
+                p.y=p.y-1;
+                if(p.y!=0)
+                pq.add(p);
+            }
+            i++;
+
+        }
+        return new String(arr).substring(0,i);
+    }
+}
+class pair implements Comparable<pair>
+{
+    char x;
+    int y;
+    pair(char x,int y)
+    {
+        this.x=x;
+        this.y=y;
+    }
+    public int compareTo(pair p)
+    {
+        return this.y-p.y;
+    }
+
+}
